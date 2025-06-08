@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Macros</title>
+  <script>
+    function calcularMacros() {
+      const sexo = document.getElementById("sexo").value;
+      const idade = parseInt(document.getElementById("idade").value);
+      const peso = parseFloat(document.getElementById("peso").value);
+      const altura = parseFloat(document.getElementById("altura").value);
+      const atividade = parseFloat(document.getElementById("atividade").value);
+      const objetivo = document.getElementById("objetivo").value;
+
+      if (isNaN(idade) || isNaN(peso) || isNaN(altura)) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+      }
+
+      let tmb = sexo === "masculino"
+        ? 10 * peso + 6.25 * altura - 5 * idade + 5
+        : 10 * peso + 6.25 * altura - 5 * idade - 161;
+
+      const calorias = Math.round(tmb * atividade);
+
+      let proteinaPct, carboPct, gorduraPct;
+      if (objetivo === "emagrecer") {
+        [proteinaPct, carboPct, gorduraPct] = [0.4, 0.35, 0.25];
+      } else if (objetivo === "manter") {
+        [proteinaPct, carboPct, gorduraPct] = [0.3, 0.45, 0.25];
+      } else {
+        [proteinaPct, carboPct, gorduraPct] = [0.3, 0.5, 0.2];
+      }
+
+      const proteina = Math.round((calorias * proteinaPct) / 4);
+      const carbo = Math.round((calorias * carboPct) / 4);
+      const gordura = Math.round((calorias * gorduraPct) / 9);
+
+      document.getElementById("resultado").innerHTML = `
+        <p><strong>Calorias diárias:</strong> ${calorias} kcal</p>
+        <p><strong>Proteínas:</strong> ${proteina} g</p>
+        <p><strong>Carboidratos:</strong> ${carbo} g</p>
+        <p><strong>Gorduras:</strong> ${gordura} g</p>
+      `;
+    }
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #resultado {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f3f3f3;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Macros</h1>
+
+  <label for="sexo">Sexo:</label>
+  <select id="sexo">
+    <option value="masculino">Masculino</option>
+    <option value="feminino">Feminino</option>
+  </select>
+
+  <label for="idade">Idade:</label>
+  <input type="number" id="idade" />
+
+  <label for="peso">Peso (kg):</label>
+  <input type="number" id="peso" />
+
+  <label for="altura">Altura (cm):</label>
+  <input type="number" id="altura" />
+
+  <label for="atividade">Nível de atividade:</label>
+  <select id="atividade">
+    <option value="1.2">Sedentário</option>
+    <option value="1.375">Levemente ativo</option>
+    <option value="1.55">Moderadamente ativo</option>
+    <option value="1.725">Muito ativo</option>
+    <option value="1.9">Extremamente ativo</option>
+  </select>
+
+  <label for="objetivo">Objetivo:</label>
+  <select id="objetivo">
+    <option value="emagrecer">Emagrecimento</option>
+    <option value="manter">Manutenção</option>
+    <option value="ganhar">Ganho de massa</option>
+  </select>
+
+  <button onclick="calcularMacros()">Calcular</button>
+
+  <div id="resultado"></div>
+</body>
+</html>
